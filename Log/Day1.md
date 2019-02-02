@@ -1,4 +1,4 @@
-# [x] Day 1: Simple types
+# :white_check_mark: Day 1: Simple types
 
 ## Topics:
 
