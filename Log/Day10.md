@@ -1,4 +1,4 @@
-# :white_check_mark: Day 9: Structs 2
+# :white_check_mark: Day 10: Classes
 
 ## Topics:
 
