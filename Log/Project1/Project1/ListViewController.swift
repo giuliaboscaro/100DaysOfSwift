@@ -18,6 +18,7 @@ class ListViewController: UITableViewController {
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        
         let fm = FileManager.default
         let path = Bundle.main.resourcePath!
         let items = try! fm.contentsOfDirectory(atPath: path)
@@ -37,14 +38,19 @@ class ListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "pictureCell", for: indexPath)
-        cell.textLabel?.text = pictures[indexPath.row]
+        let sortedPictures = pictures.sorted()
+        cell.textLabel?.text = sortedPictures[indexPath.row]
         cell.accessoryType = .disclosureIndicator
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 22)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
-        vc.selectedImage = pictures[indexPath.row]
+        let sortedPictures = pictures.sorted()
+        vc.selectedImage = sortedPictures[indexPath.row]
+        vc.row = indexPath.row + 1
+        vc.numberOfPictures = pictures.count
         navigationController?.pushViewController(vc, animated: true)
         
     }

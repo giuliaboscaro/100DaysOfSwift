@@ -11,6 +11,8 @@ import UIKit
 class DetailViewController: UIViewController {
     
     var selectedImage: String?
+    var row: Int?
+    var numberOfPictures: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,11 @@ class DetailViewController: UIViewController {
     
     func setupView() {
         view.backgroundColor = UIColor.white
-        title = selectedImage
+        
+        if let pictureNumber = row, let total = numberOfPictures {
+            title = "Picture \(pictureNumber) of \(total)"
+        }
+        
         navigationItem.largeTitleDisplayMode = .never
         
         let pictureImage: UIImageView = {
