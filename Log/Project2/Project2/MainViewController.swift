@@ -10,60 +10,50 @@ import UIKit
 
 class MainViewController: UIViewController {
     
+    var firstButton = flagButton()
+    var secondButton = flagButton()
+    var thirdButton = flagButton()
+    
     var countries = [String]()
     var score = 0
-    
+    var correctAnswer = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        firstButton.tag = 0
+        secondButton.tag = 1
+        thirdButton.tag = 2
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         askQuestions()
+        
+        [firstButton, secondButton, thirdButton].forEach { (button) in
+            button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        }
     }
     
     func askQuestions() {
-        firstButtom.setImage(UIImage(named: countries[0]), for: .normal)
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0...2)
+        firstButton.setImage(UIImage(named: countries[0]), for: .normal)
         secondButton.setImage(UIImage(named: countries[1]), for: .normal)
         thirdButton.setImage(UIImage(named: countries[2]), for: .normal)
+        
+        title = countries[correctAnswer].uppercased()
     }
-    
-    let firstButtom: UIButton = {
-        let button = UIButton(type: UIButton.ButtonType.custom)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let secondButton: UIButton = {
-        let button = UIButton(type: UIButton.ButtonType.custom)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let thirdButton: UIButton = {
-        let button = UIButton(type: UIButton.ButtonType.custom)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
 
     func setupView() {
-        
         view.backgroundColor = UIColor.white
-        view.addSubview(firstButtom)
+        view.addSubview(firstButton)
         view.addSubview(secondButton)
         view.addSubview(thirdButton)
         
-        firstButtom.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
-        firstButtom.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        firstButtom.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        firstButtom.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        firstButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        firstButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        firstButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        firstButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        secondButton.topAnchor.constraint(equalTo: firstButtom.bottomAnchor, constant: 20).isActive = true
+        secondButton.topAnchor.constraint(equalTo: firstButton.bottomAnchor, constant: 20).isActive = true
         secondButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
         secondButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         secondButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -73,11 +63,31 @@ class MainViewController: UIViewController {
         thirdButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         thirdButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
+        
     }
     
-    
-    
-    
+    @objc func buttonPressed(_ sender: UIButton) {
+        var title: String
+        var message: String
+        
+        if sender.tag == correctAnswer {
+            title = "Correct"
+            score += 1
+            message = "+1 point, your score is \(score)"
+        } else {
+            title = "Wrong"
+            score -= 1
+            message = "-1 point, your score is \(score)"
+        }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Continue", style: .default) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+            self.askQuestions()
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
     
 }
 
