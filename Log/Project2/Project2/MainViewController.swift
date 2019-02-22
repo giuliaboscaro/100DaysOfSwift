@@ -16,11 +16,13 @@ class MainViewController: UIViewController {
     
     var countries = [String]()
     var score = 0
+    var round = 1
     var correctAnswer = 0
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupLabels()
         firstButton.tag = 0
         secondButton.tag = 1
         thirdButton.tag = 2
@@ -38,10 +40,42 @@ class MainViewController: UIViewController {
         firstButton.setImage(UIImage(named: countries[0]), for: .normal)
         secondButton.setImage(UIImage(named: countries[1]), for: .normal)
         thirdButton.setImage(UIImage(named: countries[2]), for: .normal)
-        
         title = countries[correctAnswer].uppercased()
     }
+    
+    let scoreLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.tintColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let roundLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.tintColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
+    func setupLabels() {
+        let navBar = self.navigationController?.navigationBar
+        navBar?.addSubview(scoreLabel)
+        navBar?.addSubview(roundLabel)
+        scoreLabel.rightAnchor.constraint(equalTo: (navBar?.rightAnchor)!, constant: -20).isActive = true
+        scoreLabel.topAnchor.constraint(equalTo: (navBar?.topAnchor)!, constant: 10).isActive = true
+        roundLabel.leftAnchor.constraint(equalTo: (navBar?.leftAnchor)!, constant: 20).isActive = true
+        roundLabel.topAnchor.constraint(equalTo: (navBar?.topAnchor)!, constant: 10).isActive = true
+        updateLabels()
+        
+    }
+    
+    func updateLabels() {
+        scoreLabel.text = "Score: \(score)"
+        roundLabel.text = "Round: \(round)"
+    }
+    
     func setupView() {
         view.backgroundColor = UIColor.white
         view.addSubview(firstButton)
@@ -69,24 +103,37 @@ class MainViewController: UIViewController {
     @objc func buttonPressed(_ sender: UIButton) {
         var title: String
         var message: String
+        var actionTitle: String = "Continue"
         
-        if sender.tag == correctAnswer {
-            title = "Correct"
-            score += 1
-            message = "+1 point, your score is \(score)"
+        
+        if sender.tag == correctAnswer && round != 10 {
+                title = "Correct"
+                score += 1
+                message = "+1 point"
+        } else if sender.tag != correctAnswer && round != 10 {
+                title = "Wrong"
+                score -= 1
+                message = "That's the flag of \(countries[sender.tag].uppercased()), -1 point"
         } else {
-            title = "Wrong"
-            score -= 1
-            message = "-1 point, your score is \(score)"
+            title = "End game"
+            message = "You scored \(score)"
+            actionTitle = "Start again"
+            round = 0
+            score = 0
+        }
+            
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+                self.askQuestions()
         }
         
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Continue", style: .default) { (action) in
-            alert.dismiss(animated: true, completion: nil)
-            self.askQuestions()
-        }
         alert.addAction(action)
         present(alert, animated: true)
+        
+        round += 1
+        updateLabels()
+        
     }
     
 }
