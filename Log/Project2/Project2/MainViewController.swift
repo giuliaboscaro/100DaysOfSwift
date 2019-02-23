@@ -110,26 +110,52 @@ class MainViewController: UIViewController {
                 title = "Correct"
                 score += 1
                 message = "+1 point"
+            
+                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
+                    alert.dismiss(animated: true, completion: nil)
+                    self.askQuestions()
+                }
+                alert.addAction(action)
+                present(alert, animated: true)
+            
         } else if sender.tag != correctAnswer && round != 10 {
                 title = "Wrong"
                 score -= 1
                 message = "That's the flag of \(countries[sender.tag].uppercased()), -1 point"
+            
+                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
+                    alert.dismiss(animated: true, completion: nil)
+                    self.askQuestions()
+                }
+                alert.addAction(action)
+                present(alert, animated: true)
+            
         } else {
             title = "End game"
             message = "You scored \(score)"
             actionTitle = "Start again"
+            
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let shareAction = UIAlertAction(title: "Share score", style: .default) { (action) in
+                let vc = UIActivityViewController(activityItems: [self.score], applicationActivities: [])
+                vc.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
+                self.present(vc, animated: true)
+            }
+            let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
+                alert.dismiss(animated: true, completion: nil)
+                self.askQuestions()
+            }
+            
+            alert.addAction(action)
+            alert.addAction(shareAction)
+            present(alert, animated: true)
+            
             round = 0
             score = 0
         }
-            
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
-            alert.dismiss(animated: true, completion: nil)
-                self.askQuestions()
-        }
-        
-        alert.addAction(action)
-        present(alert, animated: true)
         
         round += 1
         updateLabels()
