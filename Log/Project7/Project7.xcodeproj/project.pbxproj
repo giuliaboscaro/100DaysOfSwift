@@ -13,6 +13,7 @@
 		580ACEB1222F383500ED7F4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 580ACEB0222F383500ED7F4B /* Assets.xcassets */; };
 		580ACEB4222F383500ED7F4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 580ACEB2222F383500ED7F4B /* LaunchScreen.storyboard */; };
 		580ACEBC222F39C300ED7F4B /* Petition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580ACEBB222F39C300ED7F4B /* Petition.swift */; };
+		582F6D562230B28600AA183D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582F6D552230B28600AA183D /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		580ACEB3222F383500ED7F4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		580ACEB5222F383500ED7F4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		580ACEBB222F39C300ED7F4B /* Petition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Petition.swift; sourceTree = "<group>"; };
+		582F6D552230B28600AA183D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				580ACEA9222F383200ED7F4B /* AppDelegate.swift */,
 				580ACEAB222F383200ED7F4B /* ViewController.swift */,
+				582F6D552230B28600AA183D /* DetailViewController.swift */,
 				580ACEBB222F39C300ED7F4B /* Petition.swift */,
 				580ACEAD222F383200ED7F4B /* Main.storyboard */,
 				580ACEB0222F383500ED7F4B /* Assets.xcassets */,
@@ -141,6 +144,7 @@
 				580ACEAC222F383200ED7F4B /* ViewController.swift in Sources */,
 				580ACEAA222F383200ED7F4B /* AppDelegate.swift in Sources */,
 				580ACEBC222F39C300ED7F4B /* Petition.swift in Sources */,
+				582F6D562230B28600AA183D /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
