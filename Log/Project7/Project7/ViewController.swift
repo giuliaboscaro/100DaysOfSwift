@@ -15,6 +15,11 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Petitions"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(enterFilter))
+        
         let urlString: String
         
         if navigationController?.tabBarItem.tag == 0 {
@@ -37,6 +42,36 @@ class ViewController: UITableViewController {
         let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed, please check your connection and try again", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Ok", style: .default))
         present(ac, animated: true)
+    }
+    
+    @objc func showCredits() {
+        let ac = UIAlertController(title: "Credits", message: "Petitions where gathered from We The People API of the Whitehouse", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(ac, animated: true)
+    }
+    
+    @objc func enterFilter() {
+        let ac = UIAlertController(title: "Type a word to search", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        ac.addAction(UIAlertAction(title: "Search", style: .default, handler: { (action) in
+            guard let searchText = ac.textFields?[0].text else { return }
+            self.petitions = self.filter(for: searchText)
+            self.tableView.reloadData()
+        }))
+        present(ac, animated: true)
+    }
+    
+    func filter(for word: String) -> [Petition] {
+        var filteredPetitions = [Petition]()
+        for petition in petitions {
+            let body = petition.body.lowercased()
+            let title = petition.title.lowercased()
+            
+            if body.contains(word.lowercased()) || title.contains(word.lowercased()) {
+                filteredPetitions.append(petition)
+            }
+        }
+        return filteredPetitions
     }
     
     func parse(json: Data) {
