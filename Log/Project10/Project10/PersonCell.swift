@@ -20,7 +20,7 @@ class PersonCell: UICollectionViewCell {
     
     let personPhoto: UIImageView = {
         let personPhoto = UIImageView()
-        personPhoto.frame = CGRect.init(x: 0, y: 0, width: 120, height: 120)
+        personPhoto.frame = CGRect.init(x: 0, y: 0, width: 100, height: 120)
         personPhoto.translatesAutoresizingMaskIntoConstraints = false
         return personPhoto
     }()
@@ -32,6 +32,7 @@ class PersonCell: UICollectionViewCell {
         personName.font = UIFont(name: "Marker Felt Thin", size: 16)
         personName.numberOfLines = 2
         personName.translatesAutoresizingMaskIntoConstraints = false
+        personName.textAlignment = .center
         return personName
     }()
     
@@ -43,9 +44,9 @@ class PersonCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             personPhoto.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             personPhoto.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            personPhoto.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            personPhoto.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             personPhoto.heightAnchor.constraint(equalToConstant: 120),
-            personName.topAnchor.constraint(equalTo: personPhoto.bottomAnchor, constant: 10),
+            personName.topAnchor.constraint(equalTo: personPhoto.bottomAnchor, constant: 5),
             personName.trailingAnchor.constraint(equalTo: personPhoto.trailingAnchor),
             personName.leadingAnchor.constraint(equalTo: personPhoto.leadingAnchor),
             personName.heightAnchor.constraint(equalToConstant: 40)
