@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		582F6DBA223DD5AA00AA183D /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582F6DB9223DD5AA00AA183D /* PhotoCell.swift */; };
 		58CB38032218EB83002BCD58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB38022218EB83002BCD58 /* AppDelegate.swift */; };
 		58CB38052218EB83002BCD58 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB38042218EB83002BCD58 /* ListViewController.swift */; };
 		58CB380A2218EB86002BCD58 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58CB38092218EB86002BCD58 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		582F6DB9223DD5AA00AA183D /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		58CB37FF2218EB83002BCD58 /* Project1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58CB38022218EB83002BCD58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58CB38042218EB83002BCD58 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			children = (
 				58CB38022218EB83002BCD58 /* AppDelegate.swift */,
 				58CB38042218EB83002BCD58 /* ListViewController.swift */,
+				582F6DB9223DD5AA00AA183D /* PhotoCell.swift */,
 				58CB382B221A303D002BCD58 /* DetailViewController.swift */,
 				58CB38092218EB86002BCD58 /* Assets.xcassets */,
 				58CB380B2218EB86002BCD58 /* LaunchScreen.storyboard */,
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				582F6DBA223DD5AA00AA183D /* PhotoCell.swift in Sources */,
 				58CB382C221A303D002BCD58 /* DetailViewController.swift in Sources */,
 				58CB38052218EB83002BCD58 /* ListViewController.swift in Sources */,
 				58CB38032218EB83002BCD58 /* AppDelegate.swift in Sources */,
