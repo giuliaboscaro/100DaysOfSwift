@@ -11,6 +11,7 @@ import UIKit
 class ListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var pictures = [String]()
+    var counts: [Int] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,7 @@ class ListViewController: UICollectionViewController, UICollectionViewDelegateFl
 //    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        countOpening(index: indexPath)
         let vc = DetailViewController()
         let sortedPictures = pictures.sorted()
         vc.selectedImage = sortedPictures[indexPath.item]
@@ -91,7 +93,14 @@ class ListViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         collectionView.performSelector(onMainThread: #selector(collectionView.reloadData), with: nil, waitUntilDone: false)
     }
-
+    
+    func countOpening(index: IndexPath) {
+        let defaults = UserDefaults.standard
+        counts[index.item] += 1
+        defaults.set(counts[index.item] , forKey: pictures[index.item])
+        let savedCount = defaults.integer(forKey: pictures[index.item])
+        print(savedCount)
+    }
 
 }
 

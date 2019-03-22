@@ -137,6 +137,31 @@ class MainViewController: UIViewController {
             message = "You scored \(score)"
             actionTitle = "Start again"
             
+            let highestScore = UserDefaults.standard.integer(forKey: "HighestScore")
+            
+            if score > highestScore {
+                saveScore(score: highestScore)
+                let ac = UIAlertController(title: "Congratz!", message: "This was your highest score!", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Yay!", style: .default, handler: { (action) in
+                    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    
+                    let shareAction = UIAlertAction(title: "Share score", style: .default) { (action) in
+                        let vc = UIActivityViewController(activityItems: [self.score], applicationActivities: [])
+                        vc.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
+                        self.present(vc, animated: true)
+                    }
+                    let action = UIAlertAction(title: actionTitle, style: .default) { (action) in
+                        alert.dismiss(animated: true, completion: nil)
+                        self.askQuestions()
+                    }
+                    
+                    alert.addAction(action)
+                    alert.addAction(shareAction)
+                    self.present(alert, animated: true)
+                }))
+                present(ac, animated: true)
+            }
+            
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             
             let shareAction = UIAlertAction(title: "Share score", style: .default) { (action) in
@@ -162,5 +187,9 @@ class MainViewController: UIViewController {
         
     }
     
+    func saveScore(score: Int) {
+        let defaults = UserDefaults.standard
+        defaults.set(score, forKey: "HighestScore")
+    }
 }
 
