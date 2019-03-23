@@ -2,12 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to save your photos</string>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>&quot;We need permission to save your photos&quot;</string>
+	<string>We need permission to save your photos</string>
 	<key>NSCameraUsageDescription</key>
-	<string>&quot;We need permission to save your photos&quot;</string>
+	<string>We need permission to save your photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>&quot;We need permission to save your photos&quot;</string>
+	<string>We need permission to save your photos</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

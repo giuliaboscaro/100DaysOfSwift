@@ -39,8 +39,7 @@ class ListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = PhotoViewController()
         let photo = photos[indexPath.row]
-        vc.imageName = photo.fileName
-        print(photo.fileName)
+        vc.photo = photo
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -72,7 +71,7 @@ extension ListViewController: UIImagePickerControllerDelegate, UINavigationContr
     @objc func addNewPhoto() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
-        picker.sourceType = .photoLibrary
+        picker.sourceType = .camera
         picker.delegate = self
         present(picker, animated: true)
     }
@@ -84,11 +83,17 @@ extension ListViewController: UIImagePickerControllerDelegate, UINavigationContr
         if let jpegData = image.jpegData(compressionQuality: 0.8) {
             try? jpegData.write(to: imagePath)
         }
-        let photo = Photo(fileName: imageName, caption: "Unknown")
-        photos.append(photo)
-        savePhoto()
-        tableView.reloadData()
         dismiss(animated: true)
+        let ac = UIAlertController(title: "Caption", message: "Choose a caption for the photo", preferredStyle: .alert)
+        ac.addTextField()
+        ac.addAction(UIAlertAction(title: "Done!", style: .default, handler: {[weak self, weak ac] _ in
+            guard let caption = ac?.textFields?[0].text else { return }
+            let photo = Photo(fileName: imageName, caption: caption)
+            self?.photos.append(photo)
+            self?.savePhoto()
+            self?.tableView.reloadData()
+        }))
+        present(ac, animated: true)
     }
     
     

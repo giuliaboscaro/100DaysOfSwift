@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoViewController: UIViewController {
     
-    var imageName: String?
+    var photo: Photo?
     let photoImage = UIImageView()
     
     func getDocumentsDirectory() -> URL {
@@ -19,7 +19,7 @@ class PhotoViewController: UIViewController {
     }
 
     override func loadView() {
-        let view = UIView()
+        view = UIView()
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
         photoImage.translatesAutoresizingMaskIntoConstraints = false
@@ -28,14 +28,14 @@ class PhotoViewController: UIViewController {
         photoImage.topAnchor.constraint(equalTo: view.topAnchor),
         photoImage.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         photoImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        photoImage.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        photoImage.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let imageName = imageName {
-            let path = getDocumentsDirectory().appendingPathComponent(imageName)
+        if let photo = photo {
+            let path = getDocumentsDirectory().appendingPathComponent(photo.fileName)
             photoImage.image = UIImage(contentsOfFile: path.path)
         }
     }
