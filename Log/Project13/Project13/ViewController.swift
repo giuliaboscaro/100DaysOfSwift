@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     var pictureFrame: UIView!
     var pictureView: UIImageView!
     var intensitySlider: UISlider!
+    var radiusSlider: UISlider!
     var changeFilterButton: UIButton!
     var saveButton: UIButton!
     var currentImage: UIImage!
@@ -48,6 +49,19 @@ class ViewController: UIViewController {
         intensitySlider.addTarget(self, action: #selector(intensityChanged), for: .valueChanged)
         view.addSubview(intensitySlider)
         
+        let radiusLabel = UILabel()
+        radiusLabel.text = "Radius"
+        radiusLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        radiusLabel.tintColor = .black
+        radiusLabel.sizeToFit()
+        radiusLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(radiusLabel)
+        
+        radiusSlider = UISlider()
+        radiusSlider.translatesAutoresizingMaskIntoConstraints = false
+        radiusSlider.addTarget(self, action: #selector(radiusChanged), for: .valueChanged)
+        view.addSubview(radiusSlider)
+        
         changeFilterButton = UIButton(type: .system)
         changeFilterButton.translatesAutoresizingMaskIntoConstraints = false
         changeFilterButton.setTitle("Change Filter", for: .normal)
@@ -64,7 +78,7 @@ class ViewController: UIViewController {
             pictureFrame.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
             pictureFrame.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
             pictureFrame.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-            pictureFrame.heightAnchor.constraint(equalToConstant: 470),
+            pictureFrame.heightAnchor.constraint(equalToConstant: 300),
             pictureView.topAnchor.constraint(equalTo: pictureFrame.topAnchor, constant: 10),
             pictureView.leadingAnchor.constraint(equalTo: pictureFrame.leadingAnchor, constant: 10),
             pictureView.trailingAnchor.constraint(equalTo: pictureFrame.trailingAnchor, constant: -10),
@@ -78,17 +92,18 @@ class ViewController: UIViewController {
             changeFilterButton.leadingAnchor.constraint(equalTo: intensityLabel.leadingAnchor),
             changeFilterButton.heightAnchor.constraint(equalToConstant: 44),
             changeFilterButton.widthAnchor.constraint(equalToConstant: 120),
-            changeFilterButton.topAnchor.constraint(equalTo: intensityLabel.bottomAnchor, constant: 10),
+            changeFilterButton.topAnchor.constraint(equalTo: radiusLabel.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: pictureFrame.trailingAnchor),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
             saveButton.widthAnchor.constraint(equalToConstant: 60),
             saveButton.topAnchor.constraint(equalTo: changeFilterButton.topAnchor),
+            radiusLabel.topAnchor.constraint(equalTo: intensityLabel.bottomAnchor, constant: 15),
+            radiusLabel.leadingAnchor.constraint(equalTo: intensityLabel.leadingAnchor),
+            radiusLabel.heightAnchor.constraint(equalToConstant: 50),
+            radiusSlider.leadingAnchor.constraint(equalTo: intensitySlider.leadingAnchor),
+            radiusSlider.topAnchor.constraint(equalTo: intensitySlider.bottomAnchor, constant: 35),
+            radiusSlider.trailingAnchor.constraint(equalTo: pictureFrame.trailingAnchor),
             ])
-        
-        
-        
-        
-        
     }
 
     override func viewDidLoad() {
@@ -117,11 +132,21 @@ class ViewController: UIViewController {
     }
     
     @objc func save(_ sender: Any) {
-        guard let image = pictureView.image else { return}
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        if let image = pictureView.image {
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        } else {
+            let ac = UIAlertController(title: "No picture selected", message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
+        }
+        
     }
     
     @objc func intensityChanged(_ sender: Any) {
+        applyProcessing()
+    }
+    
+    @objc func radiusChanged(_ sender: Any) {
         applyProcessing()
     }
     
@@ -129,9 +154,11 @@ class ViewController: UIViewController {
         if let error = error {
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
         }
     }
     
@@ -143,7 +170,7 @@ class ViewController: UIViewController {
         }
         
         if inputKeys.contains(kCIInputRadiusKey) {
-            currentFilter.setValue(intensitySlider.value * 200, forKey: kCIInputRadiusKey)
+            currentFilter.setValue(radiusSlider.value * 200, forKey: kCIInputRadiusKey)
         }
         
         if inputKeys.contains(kCIInputScaleKey) {
@@ -169,6 +196,7 @@ class ViewController: UIViewController {
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
         applyProcessing()
+        changeFilterButton.setTitle(action.title, for: .normal)
     }
     
 }
@@ -187,7 +215,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         currentImage = image
         
         let beginImage = CIImage(image: currentImage)
-        currentFilter.setValue(beginImage, forKey: kCIOutputImageKey)
+        currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
         applyProcessing()
     }
 }
