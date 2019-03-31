@@ -22,12 +22,24 @@ class ViewController: UIViewController {
     var context: CIContext!
     var currentFilter: CIFilter!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        pictureView.alpha = 0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIView.animate(withDuration: 2.0, delay: 0, options: [], animations: {
+            self.pictureView.alpha = 1.0
+        }, completion: nil)
+    }
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = .white
         
         pictureFrame = UIView()
-        pictureFrame.backgroundColor = .gray
         pictureFrame.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(pictureFrame)
         
@@ -212,6 +224,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[.editedImage] as? UIImage else { return }
         dismiss(animated: true)
+        
         currentImage = image
         
         let beginImage = CIImage(image: currentImage)

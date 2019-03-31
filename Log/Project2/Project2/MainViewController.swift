@@ -105,6 +105,12 @@ class MainViewController: UIViewController {
         var message: String
         var actionTitle: String = "Continue"
         
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: [], animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { finished in
+            sender.transform = .identity
+        }
+        
         
         if sender.tag == correctAnswer && round != 10 {
                 title = "Correct"
