@@ -12,6 +12,7 @@
 		582F6EE62252D89E00AA183D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 582F6EE52252D89E00AA183D /* Assets.xcassets */; };
 		582F6EE92252D89E00AA183D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 582F6EE72252D89E00AA183D /* LaunchScreen.storyboard */; };
 		582F6EF12252DA4F00AA183D /* Capital.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582F6EF02252DA4F00AA183D /* Capital.swift */; };
+		582F6EF3225436BB00AA183D /* WikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582F6EF2225436BB00AA183D /* WikiViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		582F6EE82252D89E00AA183D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		582F6EEA2252D89F00AA183D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		582F6EF02252DA4F00AA183D /* Capital.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capital.swift; sourceTree = "<group>"; };
+		582F6EF2225436BB00AA183D /* WikiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				582F6EDE2252D88E00AA183D /* AppDelegate.swift */,
 				582F6EE02252D88E00AA183D /* ViewController.swift */,
+				582F6EF2225436BB00AA183D /* WikiViewController.swift */,
 				582F6EF02252DA4F00AA183D /* Capital.swift */,
 				582F6EE52252D89E00AA183D /* Assets.xcassets */,
 				582F6EE72252D89E00AA183D /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			files = (
 				582F6EE12252D88E00AA183D /* ViewController.swift in Sources */,
 				582F6EDF2252D88E00AA183D /* AppDelegate.swift in Sources */,
+				582F6EF3225436BB00AA183D /* WikiViewController.swift in Sources */,
 				582F6EF12252DA4F00AA183D /* Capital.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
