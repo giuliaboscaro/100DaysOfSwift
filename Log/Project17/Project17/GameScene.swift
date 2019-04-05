@@ -52,17 +52,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createEnemy() {
-        guard let enemy = possibleEnemies.randomElement() else { return }
-        let sprite = SKSpriteNode(imageNamed: enemy)
-        sprite.position = CGPoint(x: 1200, y: Int.random(in: 50...736))
-        addChild(sprite)
-        sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-        sprite.physicsBody?.categoryBitMask = 1
-        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
-        sprite.physicsBody?.angularVelocity = 5
-        sprite.physicsBody?.linearDamping = 0
-        sprite.physicsBody?.angularDamping = 0
-        
+        if isGameOver == false {
+            guard let enemy = possibleEnemies.randomElement() else { return }
+            let sprite = SKSpriteNode(imageNamed: enemy)
+            sprite.position = CGPoint(x: 1200, y: Int.random(in: 50...736))
+            addChild(sprite)
+            sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+            sprite.physicsBody?.categoryBitMask = 1
+            sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+            sprite.physicsBody?.angularVelocity = 5
+            sprite.physicsBody?.linearDamping = 0
+            sprite.physicsBody?.angularDamping = 0
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -91,6 +92,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        let explosion = SKEmitterNode(fileNamed: "explosion")!
+        explosion.position = player.position
+        addChild(explosion)
+        
+        player.removeFromParent()
+        isGameOver = true
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let explosion = SKEmitterNode(fileNamed: "explosion")!
         explosion.position = player.position
         addChild(explosion)
