@@ -17,6 +17,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        assert(selectedImage != nil, "There is no selected image")
     }
     
     override func viewWillAppear(_ animated: Bool) {
