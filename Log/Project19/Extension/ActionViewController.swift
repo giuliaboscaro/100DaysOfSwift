@@ -20,6 +20,7 @@ class ActionViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(chooseScript))
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -39,18 +40,34 @@ class ActionViewController: UIViewController {
                         self?.title = self?.pageTitle
                     }
                     
+                    let defaults = UserDefaults.standard
+                    if let savedScript = defaults.object(forKey: self?.pageURL ?? "") as? String {
+                        self?.script.text = savedScript
+                    }
                 }
             }
         }
+        
+        
     }
-
-    @IBAction func done() {
+    
+    func execute(script: String) {
         let item = NSExtensionItem()
-        let argument: NSDictionary = ["customJavaScript": script.text]
+        let argument: NSDictionary = ["customJavaScript": script]
         let webDictionary: NSDictionary = [NSExtensionJavaScriptFinalizeArgumentKey: argument]
         let customJavaScript = NSItemProvider(item: webDictionary, typeIdentifier: kUTTypePropertyList as String)
         item.attachments = [customJavaScript]
         extensionContext?.completeRequest(returningItems: [item])
+        save(data: script)
+    }
+    
+    func save(data: Any) {
+        let defaults = UserDefaults.standard
+        defaults.set(data, forKey: pageURL)
+    }
+
+    @IBAction func done() {
+        execute(script: script.text)
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
@@ -68,6 +85,16 @@ class ActionViewController: UIViewController {
         
         let selectedRange = script.selectedRange
         script.scrollRangeToVisible(selectedRange)
+    }
+    
+    @objc func chooseScript() {
+        let ac = UIAlertController(title: "Choose a script", message: nil, preferredStyle: .actionSheet)
+        ac.addAction(UIAlertAction(title: "alert(document.title);", style: .default, handler: { action in
+            guard let script = action.title else { return }
+            self.execute(script: script)
+        }))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        present(ac, animated: true)
     }
 
 }
