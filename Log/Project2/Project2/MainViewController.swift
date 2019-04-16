@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class MainViewController: UIViewController {
     
@@ -31,6 +32,22 @@ class MainViewController: UIViewController {
         
         [firstButton, secondButton, thirdButton].forEach { (button) in
             button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        }
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if granted {
+                center.removeAllPendingNotificationRequests()
+                let content = UNMutableNotificationContent()
+                content.title = "Come play again"
+                content.body = "Remember how much fun you had playing? Come play again"
+                content.categoryIdentifier = "reminder"
+                content.sound = .default
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: false)
+                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                center.add(request)
+            }
         }
     }
     
