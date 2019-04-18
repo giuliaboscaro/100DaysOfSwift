@@ -12,7 +12,9 @@ import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var label: UILabel!
+    var circle: UIView!
     var locationManager: CLLocationManager?
+    var alertShown: Bool = false
     
     override func loadView() {
         view = UIView()
@@ -28,6 +30,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
+        circle = UIView()
+        circle.frame = CGRect(x: 0, y: 0, width: 256, height: 256)
+        circle.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+        circle.layer.cornerRadius = 128
+        circle.layer.zPosition = -1
+        circle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(circle)
+        
+        circle.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        circle.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        circle.widthAnchor.constraint(equalToConstant: 256).isActive = true
+        circle.heightAnchor.constraint(equalToConstant: 256).isActive = true
     }
 
     override func viewDidLoad() {
@@ -62,21 +76,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             case .far:
                 self.view.backgroundColor = .blue
                 self.label.text = "FAR"
+                self.circle.transform = CGAffineTransform(scaleX: 0.25, y: 0.25)
             case .near:
                 self.view.backgroundColor = .orange
                 self.label.text = "NEAR"
+                self.circle.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
             case .immediate:
                 self.view.backgroundColor = .red
                 self.label.text = "RIGHT HERE"
+                self.circle.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             default:
                 self.view.backgroundColor = .gray
                 self.label.text = "UNKNOWN"
+                self.circle.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if let beacon = beacons.first {
+            if alertShown == false {
+                let ac = UIAlertController(title: "Beacon detected!", message: "Wohoo", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Yay", style: .default))
+                present(ac, animated: true)
+                alertShown = true
+            }
             update(distance: beacon.proximity)
         } else {
             update(distance: .unknown)
