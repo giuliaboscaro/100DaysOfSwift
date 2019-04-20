@@ -26,6 +26,8 @@ class GameScene: SKScene {
         }
     }
     
+    var gameOverLabel: SKLabelNode!
+    
     var livesImages = [SKSpriteNode]()
     var lives = 3
     
@@ -43,6 +45,12 @@ class GameScene: SKScene {
     var sequencePosition = 0
     var chainDelay = 3.0
     var nextSequenceQueued = true
+    let initialPhysicsSpeed: CGFloat = 0.85
+    
+    let minPosition = 64
+    let maxPosition = 960
+    let beneathTheScreen = -128
+    let enemyPhysicsRadius: CGFloat = 64
     
     var isGameEnded = false
     
@@ -54,8 +62,17 @@ class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
         
+        gameOverLabel = SKLabelNode(fontNamed: "Chalkduster")
+        gameOverLabel.horizontalAlignmentMode = .left
+        gameOverLabel.fontSize = 60
+        gameOverLabel.position = CGPoint(x: 340, y: 384)
+        gameOverLabel.zPosition = 1
+        gameOverLabel.isHidden = true
+        gameOverLabel.text = "Game over"
+        addChild(gameOverLabel)
+        
         physicsWorld.gravity = CGVector(dx: 0, dy: -6)
-        physicsWorld.speed = 0.85
+        physicsWorld.speed = initialPhysicsSpeed
         
         createScore()
         createLives()
@@ -153,7 +170,7 @@ class GameScene: SKScene {
             enemy.name = "enemy"
         }
         
-        let randomPosition = CGPoint(x: Int.random(in: 64...960), y: -128)
+        let randomPosition = CGPoint(x: Int.random(in: minPosition...maxPosition), y: beneathTheScreen)
         enemy.position = randomPosition
         
         let randomAngularVelocity = CGFloat.random(in: -3...3)
@@ -171,7 +188,7 @@ class GameScene: SKScene {
         
         let randomYVelocity = Int.random(in: 24...32)
         
-        enemy.physicsBody = SKPhysicsBody(circleOfRadius: 64)
+        enemy.physicsBody = SKPhysicsBody(circleOfRadius: enemyPhysicsRadius)
         enemy.physicsBody?.velocity = CGVector(dx: randomXVelocity * 40, dy: randomYVelocity * 40)
         enemy.physicsBody?.angularVelocity = randomAngularVelocity
         enemy.physicsBody?.collisionBitMask = 0
@@ -230,6 +247,8 @@ class GameScene: SKScene {
             livesImages[1].texture = SKTexture(imageNamed: "sliceLifeGone")
             livesImages[2].texture = SKTexture(imageNamed: "sliceLifeGone")
         }
+        
+        gameOverLabel.isHidden = false
     }
     
     func subtractLife() {
@@ -354,7 +373,7 @@ class GameScene: SKScene {
                         node.removeFromParent()
                         activeEnemies.remove(at: index)
                     } else if node.name == "bombContainer" {
-                        node.name == ""
+                        node.name = ""
                         node.removeFromParent()
                         activeEnemies.remove(at: index)
                     }
