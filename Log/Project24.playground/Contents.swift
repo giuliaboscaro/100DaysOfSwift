@@ -25,6 +25,11 @@ extension String {
         return String(self.dropLast(suffix.count))
     }
     
+    func addingPrefix(_ prefix: String) -> String {
+        guard !self.hasPrefix(prefix) else { return self }
+        return prefix + self
+    }
+    
     var capitalizedFirst: String {
         guard let firstLetter = self.first else { return ""}
 //        return firstLetter.uppercased() + self.dropFirst()
@@ -39,6 +44,14 @@ extension String {
         }
         
         return false
+    }
+    
+    func isNumeric() -> Bool {
+        return Double(self) != nil
+    }
+    
+    var lines: [String.SubSequence] {
+        return self.split(separator: "\n")
     }
 }
 
@@ -62,7 +75,7 @@ input.containsAny(of: languages)
 
 languages.contains(where: input.contains)
 
-let string = "This is a test string"
+var string = "This is a test string"
 
 let attributes: [NSAttributedString.Key: Any] = [
     .foregroundColor: UIColor.white,
@@ -80,3 +93,12 @@ mutableAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 32)
 mutableAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range: NSRange(location: 15, length: 6))
 
 
+string.addingPrefix("YEAH")
+
+string = "3"
+
+print(string.isNumeric())
+
+let testString = "this\nis\na\ntest"
+
+print(testString.lines)
