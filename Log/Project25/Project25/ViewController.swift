@@ -26,11 +26,31 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(importPicture))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showConnectionPrompt))
+        
+        let importButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(importPicture))
+        let connectButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showConnectionPrompt))
+        let peersListButton = UIBarButtonItem(title: "Peers", style: .plain, target: self, action: #selector(showPeersList))
+        
+        navigationItem.rightBarButtonItems = [importButton]
+        navigationItem.leftBarButtonItems = [connectButton, peersListButton]
         
         mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         mcSession?.delegate = self
+    }
+    
+    @objc func showPeersList() {
+        guard let peers = mcSession?.connectedPeers else { return }
+        
+        var peerList = ""
+        
+        for peer in peers {
+            peerList += "\(peer.displayName)\n"
+            
+        }
+        
+        let ac = UIAlertController(title: "Connected", message: peerList, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(ac, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,7 +146,10 @@ extension ViewController: MCSessionDelegate, MCBrowserViewControllerDelegate {
         case .connecting:
             print("Connected: \(peerID.displayName)")
         case .notConnected:
-            print("Connected: \(peerID.displayName)")
+            let ac = UIAlertController(title: "Disconnected", message: "\(peerID.displayName) has disconnected", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
+            print("Not connected: \(peerID.displayName)")
         @unknown default:
             print("Unknown state received: \(peerID.displayName)")
         }
