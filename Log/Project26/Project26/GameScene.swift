@@ -33,8 +33,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     var isGameOver = false
+    var currentLevel = 1
     
     override func didMove(to view: SKView) {
+        setup()
+        
+        loadLevel(filename: "level\(currentLevel)")
+        createPlayer()
+        
+        physicsWorld.gravity = .zero
+        physicsWorld.contactDelegate = self
+        
+        motionManager = CMMotionManager()
+        motionManager?.startAccelerometerUpdates()
+    }
+    
+    func setup() {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: 512, y: 384)
         background.blendMode = .replace
@@ -47,22 +61,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.position = CGPoint(x: 16, y: 16)
         scoreLabel.zPosition = 2
         addChild(scoreLabel)
-        
-        loadLevel()
-        createPlayer()
-        
-        physicsWorld.gravity = .zero
-        physicsWorld.contactDelegate = self
-        
-        motionManager = CMMotionManager()
-        motionManager?.startAccelerometerUpdates()
     }
     
-    func loadLevel() {
-        guard let levelURL = Bundle.main.url(forResource: "level1", withExtension: "txt") else { fatalError("Could not find level1.txt in the app bundle") }
+    func loadLevel(filename: String) {
+        guard let levelURL = Bundle.main.url(forResource: filename, withExtension: "txt") else { fatalError("Could not find level in the app bundle") }
         guard let levelString = try? String(contentsOf: levelURL) else { fatalError("Could not load level1.txt from the app bundle") }
-        
-        let lines = levelString.components(separatedBy: "\n")
+        createMap(structure: levelString)
+    }
+    
+    func createMap(structure: String) {
+        let lines = structure.components(separatedBy: "\n")
         
         for (row, line) in lines.reversed().enumerated() {
             for (column, letter) in line.enumerated() {
@@ -119,6 +127,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
+    
     
     func createPlayer() {
         player = SKSpriteNode(imageNamed: "player")
@@ -191,12 +201,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.run(sequence) { [weak self] in
                 self?.createPlayer()
                 self?.isGameOver = false
+                self?.loadLevel(filename: "level\(self!.currentLevel)")
             }
         } else if node.name == "star" {
             node.removeFromParent()
             score += 1
         } else if node.name == "finish" {
-            //next level
+            player.run(SKAction.removeFromParent())
+            scene?.removeAllChildren()
+            setup()
+            createPlayer()
+            loadLevel(filename: "level\(currentLevel + 1)")
         }
     }
 }

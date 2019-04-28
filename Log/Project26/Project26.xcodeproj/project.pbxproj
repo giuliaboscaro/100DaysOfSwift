@@ -15,6 +15,7 @@
 		585F31D62273E36C008F78F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 585F31D52273E36C008F78F4 /* Assets.xcassets */; };
 		585F31D92273E36C008F78F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 585F31D72273E36C008F78F4 /* LaunchScreen.storyboard */; };
 		585F31E12273E415008F78F4 /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 585F31E02273E415008F78F4 /* level1.txt */; };
+		585F31EF2276671A008F78F4 /* level2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 585F31EE2276671A008F78F4 /* level2.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		585F31D82273E36C008F78F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		585F31DA2273E36C008F78F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		585F31E02273E415008F78F4 /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
+		585F31EE2276671A008F78F4 /* level2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level2.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				585F31D72273E36C008F78F4 /* LaunchScreen.storyboard */,
 				585F31DA2273E36C008F78F4 /* Info.plist */,
 				585F31E02273E415008F78F4 /* level1.txt */,
+				585F31EE2276671A008F78F4 /* level2.txt */,
 			);
 			path = Project26;
 			sourceTree = "<group>";
@@ -133,6 +136,7 @@
 			files = (
 				585F31E12273E415008F78F4 /* level1.txt in Resources */,
 				585F31D42273E36B008F78F4 /* Main.storyboard in Resources */,
+				585F31EF2276671A008F78F4 /* level2.txt in Resources */,
 				585F31CB2273E36B008F78F4 /* GameScene.sks in Resources */,
 				585F31D62273E36C008F78F4 /* Assets.xcassets in Resources */,
 				585F31D92273E36C008F78F4 /* LaunchScreen.storyboard in Resources */,
