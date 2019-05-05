@@ -20,6 +20,8 @@ class ViewController: UIViewController {
         
         secretTextView = UITextView()
         secretTextView.translatesAutoresizingMaskIntoConstraints = false
+        secretTextView.layer.zPosition = 2
+        secretTextView.isHidden = true
         view.addSubview(secretTextView)
         
         secretTextView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -29,15 +31,14 @@ class ViewController: UIViewController {
         
         authenticateButton = UIButton(type: .system)
         authenticateButton.setTitle("Authenticate", for: .normal)
-        authenticateButton.addTarget(self, action: #selector(authenticateTapped), for: .touchUpInside)
+        authenticateButton.addTarget(self, action: #selector(loginOrCreatePassword), for: .touchUpInside)
+        authenticateButton.layer.zPosition = 1
         authenticateButton.translatesAutoresizingMaskIntoConstraints = false
-        authenticateButton.layer.zPosition = -1
-        authenticateButton.isHidden = true
         view.addSubview(authenticateButton)
         
-        secretTextView.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        secretTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        secretTextView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        authenticateButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        authenticateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        authenticateButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -49,33 +50,6 @@ class ViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(saveSecretMessage), name: UIApplication.willResignActiveNotification, object: nil)
-    }
-    
-    @objc func authenticateTapped(_ sender: UIButton) {
-        
-        let context = LAContext()
-        var error: NSError?
-        
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            let reason = "Identify yourself"
-            
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, authenticationError in
-                DispatchQueue.main.async {
-                    if success {
-                        self?.unlockSecretMessage()
-                    } else {
-                        let ac = UIAlertController(title: "Authentication failed", message: "You could not be verified, please try again", preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "Ok", style: .default))
-                        self?.present(ac, animated: true)
-                    }
-                }
-            }
-        } else {
-            let ac = UIAlertController(title: "Biometry unavailable", message: "Your device is not configured for biometric authentication", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Ok", style: .default))
-            present(ac, animated: true)
-        }
-        
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
@@ -101,6 +75,8 @@ class ViewController: UIViewController {
         title = "Secret stuff"
         
         secretTextView.text = KeychainWrapper.standard.string(forKey: "SecretMessage") ?? ""
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveSecretMessage))
     }
     
     @objc func saveSecretMessage() {
@@ -110,7 +86,87 @@ class ViewController: UIViewController {
         secretTextView.resignFirstResponder()
         secretTextView.isHidden = true
         title = "Nothing to see here"
+        
+        navigationItem.rightBarButtonItem = nil
     }
-
+    
+    @objc func loginOrCreatePassword() {
+        let ac = UIAlertController(title: "Do you have a password?", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "No, create one", style: .default, handler: createPassword))
+        ac.addAction(UIAlertAction(title: "Yes, let me login", style: .default, handler: giveLoginOptions))
+        present(ac, animated: true)
+    }
+    
+    func createPassword(action: UIAlertAction) {
+        let ac = UIAlertController(title: "Enter a password", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        ac.textFields?[0].isSecureTextEntry = true
+        ac.addAction(UIAlertAction(title: "Registrate", style: .default, handler: { [weak self] _ in
+            guard let newPassword = ac.textFields?[0].text else { return }
+            KeychainWrapper.standard.set(newPassword, forKey: "password")
+            self?.dismiss(animated: true)
+            let ac = UIAlertController(title: "Password saved successfully", message: "Now proceed to login", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            self?.present(ac, animated: true)
+        }))
+        present(ac, animated: true)
+    }
+    
+    func giveLoginOptions(action: UIAlertAction) {
+        let ac = UIAlertController(title: "Choose login mode", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Password", style: .default, handler: passwordLoginChosen))
+        ac.addAction(UIAlertAction(title: "Touch ID / Face ID", style: .default, handler: touchIdOrFaceIdChosen))
+        present(ac, animated: true)
+    }
+    
+    func passwordLoginChosen(action: UIAlertAction) {
+        let ac = UIAlertController(title: "Enter your password", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        ac.textFields?[0].isSecureTextEntry = true
+        ac.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak self] (action) in
+            guard let passwordTyped = ac.textFields?[0].text else { return }
+            self?.checkPassword(passwordTyped: passwordTyped)
+        }))
+        present(ac, animated: true)
+    }
+    
+    func touchIdOrFaceIdChosen(action: UIAlertAction) {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Identify yourself"
+            
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, authenticationError in
+                DispatchQueue.main.async {
+                    if success {
+                        self?.unlockSecretMessage()
+                    } else {
+                        let ac = UIAlertController(title: "Authentication failed", message: "You could not be verified, please try again", preferredStyle: .alert)
+                        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+                        self?.present(ac, animated: true)
+                    }
+                }
+            }
+        } else {
+            let ac = UIAlertController(title: "Biometry unavailable", message: "Your device is not configured for biometric authentication", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
+        }
+        
+    }
+    
+    func checkPassword(passwordTyped: String) {
+        guard let password = KeychainWrapper.standard.string(forKey: "password") else { return }
+        
+        if passwordTyped == password {
+            unlockSecretMessage()
+        } else {
+            let ac = UIAlertController(title: "Wrong password", message: "Try again", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Try again", style: .default))
+            present(ac, animated: true)
+        }
+    }
+    
 }
 

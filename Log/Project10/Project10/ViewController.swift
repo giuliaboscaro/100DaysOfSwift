@@ -7,18 +7,85 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var people = [Person]()
+    var lockedView: UIView!
+    var unlockButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .black
+        title = "Names to faces"
+        
+        collectionView.backgroundColor = .white
         collectionView.register(PersonCell.self, forCellWithReuseIdentifier: "personCell")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
+        lockedView = UIView()
+        lockedView.backgroundColor = .white
+        lockedView.translatesAutoresizingMaskIntoConstraints = false
+        lockedView.layer.zPosition = 3
+        view.addSubview(lockedView)
+        lockedView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        lockedView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        lockedView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        lockedView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        unlockButton = UIButton(type: .system)
+        unlockButton.setTitle("Authenticate", for: .normal)
+        unlockButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
+        unlockButton.translatesAutoresizingMaskIntoConstraints = false
+        unlockButton.layer.zPosition = 4
+        view.addSubview(unlockButton)
+        
+        unlockButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        unlockButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        unlockButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        
+        lockedMode()
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(lockedMode), name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    @objc func lockedMode() {
+        navigationItem.leftBarButtonItem = nil
+        lockedView.isHidden = false
+        unlockButton.isHidden = false
+    }
+    
+    @objc func authenticate(_ : UIButton) {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Identify yourself"
+            
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, authenticationError in
+                DispatchQueue.main.async {
+                    if success {
+                        self?.unlock()
+                    } else {
+                        let ac = UIAlertController(title: "Authentication failed", message: "You could not be verified, please try again", preferredStyle: .alert)
+                        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+                        self?.present(ac, animated: true)
+                    }
+                }
+            }
+        } else {
+            let ac = UIAlertController(title: "Biometry unavailable", message: "Your device is not configured for biometric authentication", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac, animated: true)
+        }
+        
+    }
+    
+    func unlock() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+        lockedView.isHidden = true
+        unlockButton.isHidden = true
     }
     
     @objc func addNewPerson() {
