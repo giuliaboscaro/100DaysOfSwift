@@ -22,6 +22,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player1: SKSpriteNode!
     var player2: SKSpriteNode!
     var banana: SKSpriteNode!
+    var playerOneScore: Int = 0
+    var playerTwoScore: Int = 0
     
     var currentPlayer = 1
     
@@ -145,10 +147,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if firstNode.name == "banana" && secondNode.name == "player1" {
+            playerTwoScore += 1
+            viewController?.score(player: 2, score: playerTwoScore)
             destroy(player: player1)
         }
         
         if firstNode.name == "banana" && secondNode.name == "player2" {
+            playerOneScore += 1
+            viewController?.score(player: 1, score: playerOneScore)
             destroy(player: player2)
         }
     }
@@ -210,5 +216,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             banana = nil
             changePlayer()
         }
+        
+        if playerTwoScore == 3 || playerOneScore == 3 {
+            gameOver()
+        }
+    }
+    
+    func gameOver() {
+        let gameOverLabel = SKLabelNode(fontNamed: "Chalkduster")
+        gameOverLabel.fontSize = 44
+        gameOverLabel.position = CGPoint(x: 512, y: 383)
+        gameOverLabel.fontColor = .white
+        addChild(gameOverLabel)
+        
+        scene?.isUserInteractionEnabled = false
     }
 }
