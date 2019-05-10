@@ -15,8 +15,11 @@
 		585F32682280EFCF008F78F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 585F32672280EFCF008F78F4 /* Assets.xcassets */; };
 		585F326B2280EFCF008F78F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 585F32692280EFCF008F78F4 /* LaunchScreen.storyboard */; };
 		585F32732280F061008F78F4 /* BuildingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585F32722280F061008F78F4 /* BuildingNode.swift */; };
+<<<<<<< HEAD
 		585F327622825BD8008F78F4 /* hitPlayer.sks in Resources */ = {isa = PBXBuildFile; fileRef = 585F327422825BD8008F78F4 /* hitPlayer.sks */; };
 		585F327722825BD8008F78F4 /* hitBuilding.sks in Resources */ = {isa = PBXBuildFile; fileRef = 585F327522825BD8008F78F4 /* hitBuilding.sks */; };
+=======
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +33,11 @@
 		585F326A2280EFCF008F78F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		585F326C2280EFCF008F78F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		585F32722280F061008F78F4 /* BuildingNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingNode.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		585F327422825BD8008F78F4 /* hitPlayer.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = hitPlayer.sks; sourceTree = "<group>"; };
 		585F327522825BD8008F78F4 /* hitBuilding.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = hitBuilding.sks; sourceTree = "<group>"; };
+=======
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +79,11 @@
 				585F32722280F061008F78F4 /* BuildingNode.swift */,
 				585F32692280EFCF008F78F4 /* LaunchScreen.storyboard */,
 				585F326C2280EFCF008F78F4 /* Info.plist */,
+<<<<<<< HEAD
 				585F327522825BD8008F78F4 /* hitBuilding.sks */,
 				585F327422825BD8008F78F4 /* hitPlayer.sks */,
+=======
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
 			);
 			path = Project29;
 			sourceTree = "<group>";
@@ -139,10 +148,15 @@
 			files = (
 				585F32662280EFCC008F78F4 /* Main.storyboard in Resources */,
 				585F325D2280EFCC008F78F4 /* GameScene.sks in Resources */,
+<<<<<<< HEAD
 				585F327622825BD8008F78F4 /* hitPlayer.sks in Resources */,
 				585F32682280EFCF008F78F4 /* Assets.xcassets in Resources */,
 				585F326B2280EFCF008F78F4 /* LaunchScreen.storyboard in Resources */,
 				585F327722825BD8008F78F4 /* hitBuilding.sks in Resources */,
+=======
+				585F32682280EFCF008F78F4 /* Assets.xcassets in Resources */,
+				585F326B2280EFCF008F78F4 /* LaunchScreen.storyboard in Resources */,
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

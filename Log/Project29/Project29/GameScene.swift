@@ -15,6 +15,7 @@ enum CollisionTypes: UInt32 {
     case player = 4
 }
 
+<<<<<<< HEAD
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var buildings = [BuildingNode]()
@@ -34,6 +35,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createPlayers()
         
         physicsWorld.contactDelegate = self
+=======
+class GameScene: SKScene {
+    
+    var buildings = [BuildingNode]()
+    weak var viewController: GameViewController?
+    
+    override func didMove(to view: SKView) {
+        backgroundColor = UIColor(hue: 0.669, saturation: 0.99, brightness: 0.67, alpha: 1)
+        createBuildings()
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
         
     }
     
@@ -53,6 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func launch(angle: Int, velocity: Int) {
+<<<<<<< HEAD
         let speed = Double(velocity) / 10.0
         let radians = deg2rad(degrees: angle)
         
@@ -230,5 +242,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(gameOverLabel)
         
         scene?.isUserInteractionEnabled = false
+=======
+        
+>>>>>>> b14b847a9e9efee873d1e4805be779293d6a7149
     }
 }
